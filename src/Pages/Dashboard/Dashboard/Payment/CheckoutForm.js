@@ -145,7 +145,7 @@ const CheckoutForm = ({booking}) => {
       setCardError("");
     }
    
-    
+    setSuccess('')
     const { paymentIntent, error: confirmError } = await stripe.confirmCardPayment(clientSecret, {
         payment_method: {
           card: card,
@@ -159,6 +159,11 @@ const CheckoutForm = ({booking}) => {
     if (confirmError) {
       setCardError(confirmError.message);
       return;
+    }
+    if(paymentIntent.status==="succeeded"){
+      setSuccess('Payment hasbeen successfully done')
+      setTransactionId(paymentIntent.id)
+
     }
   
   };
