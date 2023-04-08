@@ -69,8 +69,29 @@ const CheckoutForm = ({booking}) => {
       return;
     }
     if(paymentIntent.status==="succeeded"){
-      setSuccess('Payment hasbeen successfully done')
-      setTransactionId(paymentIntent.id)
+      
+        const payment={
+          price,
+          transactionId:paymentIntent.id,
+          email,
+          bookingId:_id
+
+        }
+      fetch("http://localhost:5000/payments",{
+        method:'POST',
+        headers:{
+          'content-type':'application/json',
+          authorization:`bearer ${localStorage.getItem('accessToken')}`
+        },
+        body:JSON.stringify(payment)
+      })
+      .then(res=>res.json())
+      .then(data=>{
+        if(data.insertedId){
+          setSuccess('Payment hasbeen successfully done')
+          setTransactionId(paymentIntent.id)
+        }
+      })
 
     }
     setProcessing(false)
