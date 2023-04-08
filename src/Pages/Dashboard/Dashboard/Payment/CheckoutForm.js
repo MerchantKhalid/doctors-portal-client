@@ -1,6 +1,7 @@
 
 import { CardElement, useElements, useStripe } from "@stripe/react-stripe-js";
 import React, { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const CheckoutForm = ({booking}) => {
   const [cardError, setCardError] = useState("");
@@ -13,6 +14,7 @@ const CheckoutForm = ({booking}) => {
   
   const elements = useElements();
   const { price, email, patient, _id } = booking;
+  const navigate= useNavigate()
 
   useEffect(() => {
     fetch("http://localhost:5000/create-payment-intent", {
@@ -90,6 +92,7 @@ const CheckoutForm = ({booking}) => {
         if(data.insertedId){
           setSuccess('Payment hasbeen successfully done')
           setTransactionId(paymentIntent.id)
+          navigate('/dashboard')
         }
       })
 
